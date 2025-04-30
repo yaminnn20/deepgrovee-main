@@ -75,7 +75,7 @@ const MessageAudio = ({
     return null;
   }
 
-  return (
+    return (
     <button
       onClick={playing ? pause : play}
       className={`flex items-center justify-center w-6 h-6 rounded-full transition-colors ${
@@ -101,7 +101,7 @@ const MessageAudio = ({
         </svg>
       )}
     </button>
-  );
+    );
 };
 
 export { MessageAudio };

@@ -14,20 +14,18 @@ export const InitialLoad = ({ fn, connecting = true }: { fn: () => void, connect
   };
 
   return (
-    <div className="col-start-1 col-end-13 sm:col-start-2 sm:col-end-12 md:col-start-3 md:col-end-11 lg:col-start-4 lg:col-end-10 p-4">
-      <div className="relative block w-full bg-white shadow-lg p-6 sm:p-8 lg:p-10 rounded-2xl border border-gray-100">
-        <h2 className="font-favorit mt-2 block font-bold text-2xl text-gray-800 text-center">
-          Welcome to Reorbe&apos;s
-          <br />
-          Conversational AI Demo
+    <div className="col-start-1 col-end-13 sm:col-start-4 sm:col-end-10 md:col-start-5 md:col-end-9 lg:col-start-6 lg:col-end-8 p-2">
+      <div className="relative block w-full max-w-md mx-auto bg-white shadow-md p-6 sm:p-4 rounded-xl border border-gray-100">
+        <h2 className="font-favorit block font-bold text-xl text-gray-800 text-center">
+          Welcome to Reorbe&apos;s Conversational AI Demo
         </h2>
 
         {/* Start Button */}
-        <div className="mt-6 flex justify-center">
+        <div className="mt-4 flex justify-center">
           <button
             disabled={connecting}
             onClick={handleStart}
-            className="bg-blue-600 text-white rounded-lg px-6 py-3 font-semibold shadow-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-blue-600 text-white rounded-lg px-5 py-2 font-semibold shadow-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {connecting ? (
               <div className="flex items-center justify-center gap-2">
@@ -41,7 +39,7 @@ export const InitialLoad = ({ fn, connecting = true }: { fn: () => void, connect
         </div>
 
         {/* Language Selection Dropdown */}
-        <div className="mt-6">
+        <div className="mt-4">
           <Select
             label="Select Language"
             selectedKeys={[language]}
@@ -53,9 +51,9 @@ export const InitialLoad = ({ fn, connecting = true }: { fn: () => void, connect
             color="primary"
             variant="bordered"
             classNames={{
-              label: "text-gray-700 group-data-[filled=true]:-translate-y-4",
-              trigger: "min-h-unit-12 bg-white border-gray-200",
-              listboxWrapper: "max-h-[300px]",
+              label: "text-gray-700 group-data-[filled=true]:-translate-y-3",
+              trigger: "min-h-unit-10 bg-white border-gray-200",
+              listboxWrapper: "max-h-[250px]",
             }}
             listboxProps={{
               itemClasses: {
@@ -82,7 +80,7 @@ export const InitialLoad = ({ fn, connecting = true }: { fn: () => void, connect
                 <div key={item.key} className="flex items-center gap-2">
                   <div className="flex flex-col">
                     <span className="text-gray-800">{item.data?.name}</span>
-                    <span className="text-gray-500 text-sm">
+                    <span className="text-gray-500 text-xs">
                       ({item.data?.code})
                     </span>
                   </div>
@@ -95,7 +93,7 @@ export const InitialLoad = ({ fn, connecting = true }: { fn: () => void, connect
                 <div className="flex gap-2 items-center">
                   <div className="flex flex-col">
                     <span className="text-gray-800">{language.name}</span>
-                    <span className="text-gray-500 text-sm">
+                    <span className="text-gray-500 text-xs">
                       {language.code}
                     </span>
                   </div>
@@ -106,14 +104,12 @@ export const InitialLoad = ({ fn, connecting = true }: { fn: () => void, connect
         </div>
 
         {/* Footer Note */}
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-4 text-center text-xs text-gray-600">
           <div className="flex items-center justify-center gap-2">
             <Headphones />
-            <span>
-              For optimal performance, we recommend using headphones while using this application.
-            </span>
+            <span>For optimal performance, we recommend using headphones.</span>
           </div>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-1 text-gray-500">
             Minor bugs and annoyances may appear while using this demo.
           </p>
         </div>

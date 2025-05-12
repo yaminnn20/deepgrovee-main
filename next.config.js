@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 
+
 const CopyPlugin = require("copy-webpack-plugin");
 
 const wasmPaths = [
@@ -17,12 +18,12 @@ const wasmPaths = [
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  productionBrowserSourceMaps: false, // Disable source maps in production
-  webpack(config, { dev, isServer }) {
+},
+  webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
+
     });
 
     config.resolve.alias = {
@@ -30,29 +31,6 @@ const nextConfig = {
       sharp$: false,
       "onnxruntime-node$": false,
     };
-
-    // Production optimizations
-    if (!dev) {
-      config.optimization = {
-        ...config.optimization,
-        minimize: true,
-        minimizer: [
-          ...config.optimization.minimizer,
-          new (require('terser-webpack-plugin'))({
-            terserOptions: {
-              compress: {
-                drop_console: true, // Remove console.logs
-                drop_debugger: true,
-              },
-              mangle: true, // Mangle variable names
-              output: {
-                comments: false, // Remove comments
-              },
-            },
-          }),
-        ],
-      };
-    }
 
     config.plugins.push(
       new CopyPlugin({
@@ -88,18 +66,6 @@ const nextConfig = {
           {
             key: "Cross-Origin-Embedder-Policy",
             value: "require-corp",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
           },
         ],
       },

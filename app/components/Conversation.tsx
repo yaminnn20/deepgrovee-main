@@ -151,7 +151,7 @@ export default function Conversation(): JSX.Element {
     append,
     handleInputChange,
     input,
-    handleSubmit,
+    handleSubmit: originalHandleSubmit,
     isLoading: llmLoading,
   } = useChat({
     id: "aura",
@@ -159,9 +159,16 @@ export default function Conversation(): JSX.Element {
     initialMessages: [systemMessage, greetingMessage],
     onFinish,
     onResponse,
-    
+    body: {
+      useTools: true // Always use tools for now
+    }
   });
   
+  // Override handleSubmit to include useTools
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    originalHandleSubmit(e);
+  };
  
   const [currentUtterance, setCurrentUtterance] = useState<string>();
   const [failsafeTimeout, setFailsafeTimeout] = useState<NodeJS.Timeout>();

@@ -1,4 +1,4 @@
-import { Message } from "ai";
+import { CoreMessage } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -10,10 +10,10 @@ export async function POST(req: NextRequest) {
   // gotta use the request object to invalidate the cache every request :vomit:
   const url = req.url;
   const model = req.nextUrl.searchParams.get("model") ?? "aura-helios-en";
-  const message: Message = await req.json();
+  const message: CoreMessage = await req.json();
   const start = Date.now();
 
-  let text = message.content;
+  let text = typeof message.content === "string" ? message.content : "";
 
   text = text
     .replaceAll("¡", "")
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     .replaceAll(/```[\s\S]*?```/g, "\nAs shown on the screen.\n")
     .replaceAll(
       /([a-zA-Z0-9])\/([a-zA-Z0-9])/g,
-      (match, precedingText, followingText) => {
+      (match: string, precedingText: string, followingText: string) => {
         return precedingText + " forward slash " + followingText;
       }
     );

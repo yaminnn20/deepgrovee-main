@@ -1,8 +1,9 @@
-import { Message } from "ai";
+import { Message } from "ai/react";
 
-export interface MessageMetadata extends Partial<Message> {
+export type MessageMetadata = Partial<Message> & {
+  id?: string;
   start?: number;
   response?: number;
   end?: number;
   ttsModel?: string;
-}
+};

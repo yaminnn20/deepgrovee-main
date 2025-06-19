@@ -23,6 +23,7 @@ type MicrophoneContext = {
   queueSize: number;
   queue: Blob[];
   stream: MediaStream | undefined;
+  microphoneError: string | null;
 };
 
 interface MicrophoneContextInterface {
@@ -37,6 +38,7 @@ const MicrophoneContextProvider = ({
   const [microphone, setMicrophone] = useState<MediaRecorder>();
   const [stream, setStream] = useState<MediaStream>();
   const [microphoneOpen, setMicrophoneOpen] = useState(false);
+  const [microphoneError, setMicrophoneError] = useState<string | null>(null);
 
   const {
     add: enqueueBlob, // addMicrophoneBlob,
@@ -48,24 +50,30 @@ const MicrophoneContextProvider = ({
 
   useEffect(() => {
     async function setupMicrophone() {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          noiseSuppression: true,
-          echoCancellation: true,
-        },
-      });
-
-      setStream(stream);
-
-      const microphone = new MediaRecorder(stream);
-
-      setMicrophone(microphone);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            noiseSuppression: true,
+            echoCancellation: true,
+          },
+        });
+        setStream(stream);
+        const microphone = new MediaRecorder(stream);
+        setMicrophone(microphone);
+        setMicrophoneError(null); // clear error if successful
+      } catch (err: any) {
+        if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+          setMicrophoneError("Microphone access was denied. Please allow access and try again.");
+        } else {
+          setMicrophoneError("An error occurred while accessing the microphone.");
+        }
+      }
     }
 
-    if (!microphone) {
+    if (!microphone && !microphoneError) {
       setupMicrophone();
     }
-  }, [enqueueBlob, microphone, microphoneOpen]);
+  }, [enqueueBlob, microphone, microphoneOpen, microphoneError]);
 
   useEffect(() => {
     if (!microphone) return;
@@ -120,6 +128,7 @@ const MicrophoneContextProvider = ({
         queueSize,
         queue,
         stream,
+        microphoneError,
       }}
     >
       {children}

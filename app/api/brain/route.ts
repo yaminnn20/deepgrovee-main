@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   // Request the OpenAI API for the response based on the prompt
   try {
     const result = streamText({
-      model: groq('meta-llama/llama-4-scout-17b-16e-instruct'),
+      model: groq('gemma2-9b-it'),
       messages,
     });
 

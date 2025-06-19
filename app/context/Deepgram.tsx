@@ -18,6 +18,7 @@ import {
 } from "react";
 import { useToast } from "./Toast";
 import { useLocalStorage } from "../lib/hooks/useLocalStorage";
+import { useMicrophone } from "./Microphone";
 
 type DeepgramContext = {
   ttsOptions: SpeakSchema | undefined;
@@ -173,6 +174,7 @@ const getApiKey = async (): Promise<string> => {
 
 const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
   const { toast } = useToast();
+  const { microphoneError } = useMicrophone();
   const [ttsOptions, setTtsOptions] = useLocalStorage<SpeakSchema | undefined>('ttsModel');
   const [sttOptions, setSttOptions] = useLocalStorage<LiveSchema | undefined>('sttModel');
   const [connection, setConnection] = useState<LiveClient>();
@@ -206,10 +208,10 @@ const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
       setSttOptions(defaultSttOptions);
     }
 
-    if (connection === undefined && sttOptions) {
+    if (connection === undefined && sttOptions && !microphoneError) {
       connect(sttOptions);
     }
-  }, [connect, connection, setSttOptions, setTtsOptions, sttOptions, ttsOptions]);
+  }, [connect, connection, setSttOptions, setTtsOptions, sttOptions, ttsOptions, microphoneError]);
 
   useEffect(() => {
     if (sttOptions && connection) {
